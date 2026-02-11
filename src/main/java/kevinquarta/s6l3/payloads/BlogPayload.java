@@ -13,5 +13,5 @@ public class BlogPayload {
     private String title;
     private String content;
     private int tempoDiLettura;
-    private User user;
+    private Long userId;
 }

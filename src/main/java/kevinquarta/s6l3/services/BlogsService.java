@@ -2,9 +2,11 @@ package kevinquarta.s6l3.services;
 
 
 import kevinquarta.s6l3.entities.Blog;
+import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.NotFoundException;
 import kevinquarta.s6l3.payloads.BlogPayload;
 import kevinquarta.s6l3.repositories.BlogsRepository;
+import kevinquarta.s6l3.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +21,12 @@ import org.springframework.stereotype.Service;
 public class BlogsService {
 
     private final BlogsRepository blogsRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public BlogsService(BlogsRepository blogsRepository) {
+    public BlogsService(BlogsRepository blogsRepository,UsersRepository usersRepository) {
         this.blogsRepository = blogsRepository;
+        this.usersRepository = usersRepository;
     }
 
     public Page<Blog> findAll(int page, int size, String orderBy, String sortCriteria) {
@@ -35,9 +39,18 @@ public class BlogsService {
     }
 
 //    SALVA BLOG
-    public Blog saveBlog (BlogPayload payload){
+    public Blog saveBlog (BlogPayload payload) {
+//        RICERCO UTENTE
+        User user = usersRepository.findById(payload.getUserId())
+                .orElseThrow(()->new NotFoundException(payload.getUserId()));
 //        NUOVO BLOG
-        Blog newBlog = new Blog(payload.getCategoria(),payload.getTitle(), payload.getContent(), payload.getTempoDiLettura(),payload.getUser());
+        Blog newBlog = new Blog(
+                payload.getCategoria(),
+                payload.getTitle(),
+                payload.getContent(),
+                payload.getTempoDiLettura(),
+//                QUI PASSO L'UTENTE A CUI DEVE ESSERE COLLEGATO IL BLOG
+                user);
 //       SALVA BLOG
         Blog savedBlog = blogsRepository.save(newBlog);
 //        LOG

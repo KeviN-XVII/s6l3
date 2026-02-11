@@ -34,7 +34,5 @@ public class Blog {
         this.content = content;
         this.tempoDiLettura = tempoDiLettura;
         this.user = user;
-        Random rndm = new Random();
-        this.id = rndm.nextInt(1, 1000);
     }
 }
