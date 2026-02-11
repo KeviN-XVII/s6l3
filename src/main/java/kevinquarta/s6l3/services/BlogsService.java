@@ -2,7 +2,6 @@ package kevinquarta.s6l3.services;
 
 
 import kevinquarta.s6l3.entities.Blog;
-import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.NotFoundException;
 import kevinquarta.s6l3.payloads.BlogPayload;
 import kevinquarta.s6l3.repositories.BlogsRepository;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j

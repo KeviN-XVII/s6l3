@@ -46,7 +46,7 @@ public class UsersService {
 //        SALVO
        User savedUser = usersRepository.save(newUser);
 //       LOG
-        log.info("L'utente" + newUser.getName() + newUser.getSurname() + "è stato salvato correttamente!");
+        log.info("L'utente " + newUser.getName() +" "+ newUser.getSurname() + " è stato salvato correttamente!");
         return savedUser;
     }
 
