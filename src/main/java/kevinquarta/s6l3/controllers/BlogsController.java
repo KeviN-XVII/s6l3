@@ -27,6 +27,7 @@ public class BlogsController {
     @RequestParam(defaultValue = "2")int size,
     @RequestParam(defaultValue = "title")String orderBy,
     @RequestParam(defaultValue = "asc")String sortCriteria) {
+
         return blogsService.findAll(page, size, orderBy, sortCriteria);
     }
 
