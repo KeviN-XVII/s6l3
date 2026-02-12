@@ -3,12 +3,19 @@ package kevinquarta.s6l3.controllers;
 
 
 import kevinquarta.s6l3.entities.Blog;
+import kevinquarta.s6l3.exceptions.ValidationException;
+import kevinquarta.s6l3.payloads.BlogDTO;
 import kevinquarta.s6l3.payloads.BlogPayload;
+import kevinquarta.s6l3.payloads.BlogUpdateDTO;
 import kevinquarta.s6l3.services.BlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/blogs")
@@ -40,14 +47,32 @@ public Blog getBlogById(@PathVariable long blogId) {
 //3 POST /blogs crea un nuovo blog post
 @PostMapping
 @ResponseStatus(HttpStatus.CREATED)
-public Blog createBlog(@RequestBody BlogPayload payload) {
-    return this.blogsService.saveBlog(payload);
+public Blog createBlog(@RequestBody @Validated BlogDTO payload, BindingResult validationResult) {
+    if (validationResult.hasErrors()) {
+
+        List<String> errorsList = validationResult.getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getDefaultMessage())
+                .toList();
+        throw new ValidationException(errorsList);
+    }else {
+        return this.blogsService.saveBlog(payload);
+    }
 }
 
 //4 PUT /blogs/123 modifica lo specifico blog
 @PutMapping("/{blogId}")
-public Blog  updateBlog(@PathVariable long blogId, @RequestBody BlogPayload payload) {
-    return this.blogsService.findByIdAndUpdate(blogId, payload);
+public Blog  updateBlog(@PathVariable long blogId, @RequestBody @Validated BlogUpdateDTO payload, BindingResult validationResult) {
+    if (validationResult.hasErrors()) {
+
+        List<String> errorsList = validationResult.getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getDefaultMessage())
+                .toList();
+        throw new ValidationException(errorsList);
+    }else {
+        return this.blogsService.findByIdAndUpdate(blogId, payload);
+    }
 }
 
 //5 DELETE /blogs/123 elimina uno specifico blog post

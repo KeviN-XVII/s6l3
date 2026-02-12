@@ -4,7 +4,9 @@ package kevinquarta.s6l3.services;
 import kevinquarta.s6l3.entities.Blog;
 import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.NotFoundException;
+import kevinquarta.s6l3.payloads.BlogDTO;
 import kevinquarta.s6l3.payloads.BlogPayload;
+import kevinquarta.s6l3.payloads.BlogUpdateDTO;
 import kevinquarta.s6l3.repositories.BlogsRepository;
 import kevinquarta.s6l3.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +41,16 @@ public class BlogsService {
     }
 
 //    SALVA BLOG
-    public Blog saveBlog (BlogPayload payload) {
+    public Blog saveBlog (BlogDTO payload) {
 //        RICERCO UTENTE
-        User user = usersRepository.findById(payload.getUserId())
-                .orElseThrow(()->new NotFoundException(payload.getUserId()));
+        User user = usersRepository.findById(payload.userId())
+                .orElseThrow(()->new NotFoundException(payload.userId()));
 //        NUOVO BLOG
         Blog newBlog = new Blog(
-                payload.getCategoria(),
-                payload.getTitle(),
-                payload.getContent(),
-                payload.getTempoDiLettura(),
+                payload.categoria(),
+                payload.title(),
+                payload.content(),
+                payload.tempoDiLettura(),
 //                QUI PASSO L'UTENTE A CUI DEVE ESSERE COLLEGATO IL BLOG
                 user);
 //       SALVA BLOG
@@ -66,14 +68,14 @@ public class BlogsService {
 
 
 //    CERCA E MODIFICA BLOG
-    public Blog findByIdAndUpdate(long blogId, BlogPayload payload){
+    public Blog findByIdAndUpdate(long blogId, BlogUpdateDTO payload){
 //        CERCO BLOG
         Blog found = this.findById(blogId);
 //        MODIFICA BLOG
-        found.setCategoria(payload.getCategoria());
-        found.setTitle(payload.getTitle());
-        found.setContent(payload.getContent());
-        found.setTempoDiLettura(payload.getTempoDiLettura());
+        found.setCategoria(payload.categoria());
+        found.setTitle(payload.title());
+        found.setContent(payload.content());
+        found.setTempoDiLettura(payload.tempoDiLettura());
 //       SALVO
         Blog modifiedBlog = blogsRepository.save(found);
 //        LOG
