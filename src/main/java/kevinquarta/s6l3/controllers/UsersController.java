@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,15 @@ public class UsersController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable long userId) {
         this.usersService.findByIdAndDelete(userId);
+    }
+
+//    UPLOADIMAGE
+    @PatchMapping("/{userId}/avatar")
+    public User uploadImage(@RequestParam("profile_picture") MultipartFile file,@PathVariable long userId){
+
+        String url=this.usersService.uploadAvatar(file);
+
+        return url;
     }
 
 }

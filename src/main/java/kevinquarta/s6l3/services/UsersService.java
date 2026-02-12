@@ -2,6 +2,8 @@ package kevinquarta.s6l3.services;
 
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.BadRequestException;
 import kevinquarta.s6l3.exceptions.NotFoundException;
@@ -14,15 +16,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 @Slf4j
 public class UsersService {
     private final UsersRepository usersRepository;
+    private final Cloudinary cloudinaryUploader;
 
     @Autowired
-    public UsersService(UsersRepository usersRepository) {
+    public UsersService(UsersRepository usersRepository,Cloudinary cloudinaryUploader) {
         this.usersRepository = usersRepository;
+        this.cloudinaryUploader = cloudinaryUploader;
     }
 
 
@@ -85,5 +93,28 @@ public class UsersService {
     public void findByIdAndDelete(long userId){
        User found = this.findById(userId);
        this.usersRepository.delete(found);
+    }
+
+
+//    UPLOAD AVATAR UTENTE
+    public String uploadAvatar(long userId,MultipartFile file){
+//        controlli...
+//        find by id utente
+        User found = this.findById(userId);
+//        upload del file cloudinary
+      try {
+          Map result = cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+
+          String imageUrl = (String) result.get("secure_url");
+
+          found.setAvatar(imageUrl);
+
+
+          return found;
+
+
+      }catch (IOException e){
+          throw new RuntimeException(e);
+      }
     }
 }
