@@ -1,7 +1,9 @@
 package kevinquarta.s6l3.exceptions;
 
 
+import kevinquarta.s6l3.payloads.ErrorsDTO;
 import kevinquarta.s6l3.payloads.ErrorsPayload;
+import kevinquarta.s6l3.payloads.ErrorsWithListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,22 +13,29 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class ErrorsHandler {
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorsWithListDTO handleValidationException(ValidationException ex) {
+        return new ErrorsWithListDTO(ex.getMessage(),LocalDateTime.now(),ex.getErrorsMessages());
+    }
+
+
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorsPayload handleBadRequest(BadRequestException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+    public ErrorsDTO handleBadRequest(BadRequestException ex) {
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorsPayload handleNotFound(NotFoundException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+    public ErrorsDTO handleNotFound(NotFoundException ex) {
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
-    public ErrorsPayload handleGenericServerError(Exception ex) {
+    public ErrorsDTO handleGenericServerError(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsPayload("C'è stato un errore,risolveremo al più presto!", LocalDateTime.now());
+        return new ErrorsDTO("C'è stato un errore,risolveremo al più presto!", LocalDateTime.now());
     }
 
     }

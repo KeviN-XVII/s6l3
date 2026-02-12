@@ -5,6 +5,7 @@ package kevinquarta.s6l3.services;
 import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.BadRequestException;
 import kevinquarta.s6l3.exceptions.NotFoundException;
+import kevinquarta.s6l3.payloads.UserDTO;
 import kevinquarta.s6l3.payloads.UserPayload;
 import kevinquarta.s6l3.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,13 +37,13 @@ public class UsersService {
     }
 
 // SALVA NUOVO UTENTE
-    public User saveUser(UserPayload payload){
+    public User saveUser(UserDTO payload){
 //        CONTROLLO EMAIL
-        this.usersRepository.findByEmail(payload.getEmail()).ifPresent(user -> {
+        this.usersRepository.findByEmail(payload.email()).ifPresent(user -> {
             throw new BadRequestException("L'email "+ user.getEmail() + " è già registrata!");});
 //        NUOVO USER
-        User newUser = new User(payload.getName(), payload.getSurname(), payload.getEmail(), payload.getDateOfBirth());
-        newUser.setAvatar("https://ui-avatars.com/api/?name="+payload.getName()+"+"+payload.getSurname());
+        User newUser = new User(payload.name(), payload.surname(), payload.email(), payload.dateOfBirth());
+        newUser.setAvatar("https://ui-avatars.com/api/?name="+payload.name()+"+"+payload.surname());
 //        SALVO
        User savedUser = usersRepository.save(newUser);
 //       LOG
@@ -59,19 +60,19 @@ public class UsersService {
 
 
 //    MODIFICA UTENTE
-    public User findByIdAndUpdate(long userId, UserPayload payload){
+    public User findByIdAndUpdate(long userId, UserDTO payload){
 //       CERCO UTENTE
         User found = this.findById(userId);
 //        VALIDAZIONE DATI
-        if(!found.getEmail().equals(payload.getEmail()))this.usersRepository.findByEmail(payload.getEmail()).ifPresent(user -> {
+        if(!found.getEmail().equals(payload.email()))this.usersRepository.findByEmail(payload.email()).ifPresent(user -> {
             throw new BadRequestException("L'email "+user.getEmail()+" è già in uso!");
         });
 //        MODIFICO UTENTE
-        found.setName(payload.getName());
-        found.setSurname(payload.getSurname());
-        found.setEmail(payload.getEmail());
-        found.setDateOfBirth(payload.getDateOfBirth());
-        found.setAvatar("https://ui-avatars.com/api?name=" + payload.getName() + "+" + payload.getSurname());
+        found.setName(payload.name());
+        found.setSurname(payload.surname());
+        found.setEmail(payload.email());
+        found.setDateOfBirth(payload.dateOfBirth());
+        found.setAvatar("https://ui-avatars.com/api?name=" + payload.name() + "+" + payload.surname());
 //        SALVO
         User modifiedUser = usersRepository.save(found);
 //        LOG
