@@ -19,8 +19,6 @@ public class ErrorsHandler {
         return new ErrorsWithListDTO(ex.getMessage(),LocalDateTime.now(),ex.getErrorsMessages());
     }
 
-
-
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsDTO handleBadRequest(BadRequestException ex) {

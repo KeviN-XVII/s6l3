@@ -6,7 +6,6 @@ import kevinquarta.s6l3.entities.User;
 import kevinquarta.s6l3.exceptions.BadRequestException;
 import kevinquarta.s6l3.exceptions.NotFoundException;
 import kevinquarta.s6l3.payloads.UserDTO;
-import kevinquarta.s6l3.payloads.UserPayload;
 import kevinquarta.s6l3.repositories.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

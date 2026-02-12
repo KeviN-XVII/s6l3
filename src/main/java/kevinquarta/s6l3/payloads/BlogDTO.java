@@ -1,6 +1,7 @@
 package kevinquarta.s6l3.payloads;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record BlogDTO(
@@ -13,6 +14,6 @@ public record BlogDTO(
         @NotBlank(message="il contenuto è obbligatorio")
         String content,
         int tempoDiLettura,
-        @NotBlank(message = "L'id dell'utente è obbligatorio")
+        @NotNull(message = "L'id dell'utente è obbligatorio")
         Long userId) {
 }

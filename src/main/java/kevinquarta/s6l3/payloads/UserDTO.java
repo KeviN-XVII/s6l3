@@ -2,6 +2,7 @@ package kevinquarta.s6l3.payloads;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -16,6 +17,6 @@ public record UserDTO(
         @NotBlank(message="L'email è obbligatoria")
         @Email(message = "L'indirizzo email inserito non è nel formato corretto!")
         String email,
-        @NotBlank(message="La data di nascita è un campo obbligatorio")
+        @NotNull(message = "La data di nascita è obbligatoria")
         LocalDate dateOfBirth) {
 }

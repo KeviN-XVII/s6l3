@@ -2,8 +2,8 @@ package kevinquarta.s6l3.controllers;
 
 
 
-import jakarta.validation.ValidationException;
 import kevinquarta.s6l3.entities.User;
+import kevinquarta.s6l3.exceptions.ValidationException;
 import kevinquarta.s6l3.payloads.UserDTO;
 import kevinquarta.s6l3.payloads.UserPayload;
 import kevinquarta.s6l3.services.UsersService;
@@ -49,16 +49,16 @@ public class UsersController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody @Validated UserDTO payload, BindingResult validationResult) {
+
         if (validationResult.hasErrors()) {
+
             List<String> errorsList = validationResult.getFieldErrors()
                     .stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
                     .toList();
             throw new ValidationException(errorsList);
         }else{
-
         return this.usersService.saveUser(payload);
-
         }
     }
 
