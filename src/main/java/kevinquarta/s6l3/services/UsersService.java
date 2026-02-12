@@ -97,7 +97,7 @@ public class UsersService {
 
 
 //    UPLOAD AVATAR UTENTE
-    public String uploadAvatar(long userId,MultipartFile file){
+    public User uploadAvatar(long userId,MultipartFile file){
 //        controlli...
 //        find by id utente
         User found = this.findById(userId);

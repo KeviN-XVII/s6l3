@@ -80,7 +80,7 @@ public class UsersController {
     @PatchMapping("/{userId}/avatar")
     public User uploadImage(@RequestParam("profile_picture") MultipartFile file,@PathVariable long userId){
 
-        String url=this.usersService.uploadAvatar(file);
+        User url=this.usersService.uploadAvatar(userId,file);
 
         return url;
     }
